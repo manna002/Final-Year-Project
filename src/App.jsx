@@ -36,10 +36,12 @@ export default function App() {
               <header className={styles.header}>
                 <div className={styles.brand}>
                   <Link to={isAdmin ? '/admin' : '/'} className={styles.logoLink}>
-                    <div className={styles.logo}>R</div>
+                    <div className={styles.logo}>
+                      <img src="/funaab-logo.png" alt="FUNAAB Logo" />
+                    </div>
                   </Link>
                   <div>
-                    <div className={styles.brandName}>REVOSMART</div>
+                    <div className={styles.brandName}>FUNAAB</div>
                     <div className={styles.brandSub}>Smart Irrigation Dashboard</div>
                   </div>
                 </div>
@@ -88,7 +90,7 @@ export default function App() {
               </Routes>
 
               <footer className={styles.footer}>
-                © 2026 REVOSMART Integrated Services
+                © 2026 FUNAAB — Federal University of Agriculture, Abeokuta
               </footer>
             </div>
           </ProtectedRoute>

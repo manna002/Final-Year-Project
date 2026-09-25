@@ -134,9 +134,9 @@ export default function LoginPage() {
     ? 'Enter your email to receive a reset link'
     : isSignup
       ? accountType === 'admin'
-        ? 'Register as a REVOSMART company worker'
+        ? 'Register as a FUNAAB system administrator'
         : 'Register to monitor your irrigation system'
-      : 'Sign in to your REVOSMART dashboard'
+      : 'Sign in to your FUNAAB irrigation dashboard'
 
   return (
     <div className={styles.page}>
@@ -148,8 +148,10 @@ export default function LoginPage() {
       <div className={styles.card}>
         {/* Brand header */}
         <div className={styles.brandArea}>
-          <div className={styles.logo}>R</div>
-          <div className={styles.brandName}>REVOSMART</div>
+          <div className={styles.logo}>
+            <img src="/funaab-logo.png" alt="FUNAAB Logo" />
+          </div>
+          <div className={styles.brandName}>FUNAAB</div>
           <div className={styles.brandSub}>Smart Irrigation System</div>
         </div>
 
@@ -203,7 +205,7 @@ export default function LoginPage() {
               <input
                 type="text"
                 className={styles.input + ' ' + styles.inputAdmin}
-                placeholder="e.g. REVOSMART-2026 or ADM-001"
+                placeholder="e.g. FUNAAB-2026 or ADM-001"
                 value={adminCode}
                 onChange={e => setAdminCode(e.target.value)}
                 required
@@ -314,7 +316,7 @@ export default function LoginPage() {
       </div>
 
       <div className={styles.footer}>
-        © 2026 REVOSMART Integrated Services
+        © 2026 FUNAAB — Federal University of Agriculture, Abeokuta
       </div>
     </div>
   )

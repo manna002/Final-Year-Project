@@ -3,7 +3,7 @@ import styles from './ActivityFeed.module.css'
 const ACTION_CONFIG = {
   LOGIN:           { icon: '🔑', color: '#a78bfa', label: 'Login' },
   LOGOUT:          { icon: '🚪', color: '#a78bfa', label: 'Logout' },
-  PUMP_ON:         { icon: '💧',  color: '#ff7a00', label: 'Valve ON' },
+  PUMP_ON:         { icon: '💧',  color: '#1a6b3c', label: 'Valve ON' },
   PUMP_OFF:        { icon: '🛑',  color: '#ef4444', label: 'Valve OFF' },
   PUMP_TOGGLE:     { icon: '⚡',  color: '#f59e0b', label: 'Valve Toggle' },
   MODE_CHANGE:     { icon: '⚙',  color: '#60a5fa', label: 'Mode Change' },

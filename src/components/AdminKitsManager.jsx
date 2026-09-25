@@ -45,7 +45,7 @@ export default function AdminKitsManager({ users }) {
       .from('kits')
       .insert({
         kit_id: newKitId.trim(),
-        name: newKitName.trim() || 'REVO IMS'
+        name: newKitName.trim() || 'FUNAAB IMS'
       })
       .select()
 
@@ -109,7 +109,7 @@ export default function AdminKitsManager({ users }) {
         <form onSubmit={handleAddKit} className={styles.formGroup}>
           <input
             type="text"
-            placeholder="Kit ID (e.g. REVO-KIT-001)"
+            placeholder="Kit ID (e.g. FUNAAB-KIT-001)"
             value={newKitId}
             onChange={e => setNewKitId(e.target.value)}
             className={styles.input}

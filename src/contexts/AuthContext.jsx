@@ -8,7 +8,7 @@ const AuthContext = createContext(null)
 // during signup to register as an admin. Add more codes here or manage them
 // in the Supabase admin_codes table later.
 const VALID_ADMIN_CODES = [
-  'REVOSMART-2026',
+  'FUNAAB-2026',
   'ADM-001',
   'ADM-002',
   'ADM-003',

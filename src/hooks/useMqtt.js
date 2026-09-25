@@ -7,7 +7,7 @@ const BROKER = import.meta.env.VITE_MQTT_BROKER || 'wss://broker.hivemq.com:8884
 const USERNAME = import.meta.env.VITE_MQTT_USERNAME || ''
 const PASSWORD = import.meta.env.VITE_MQTT_PASSWORD || ''
 
-const CLIENT_ID = 'REVO_DASH_' + Math.random().toString(16).slice(2, 8)
+const CLIENT_ID = 'FUNAAB_DASH_' + Math.random().toString(16).slice(2, 8)
 
 export default function useMqtt(kitId) {
   const clientRef = useRef(null)
@@ -41,7 +41,7 @@ export default function useMqtt(kitId) {
     // Reset the online marker when kitId changes so it updates the new kit
     markedOnlineRef.current = false
 
-    const base = kitId // dynamic topic base, e.g. "REVO-KIT-001"
+    const base = kitId // dynamic topic base, e.g. "FUNAAB-KIT-001"
     const TOPICS = [
       `${base}/sensor/temperature`,
       `${base}/sensor/humidity`,

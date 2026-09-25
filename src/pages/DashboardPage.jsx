@@ -33,10 +33,10 @@ export default function DashboardPage() {
         .eq('owner_id', user.id)
       
       if (data && data.length > 0) {
-        // Automatically rename the kit to "REVO IMS" permanently in the database
-        if (data[0].id && data[0].name !== 'REVO IMS') {
-          await supabase.from('kits').update({ name: 'REVO IMS' }).eq('id', data[0].id)
-          data[0].name = 'REVO IMS'
+        // Automatically rename the kit to "FUNAAB IMS" permanently in the database
+        if (data[0].id && data[0].name !== 'FUNAAB IMS') {
+          await supabase.from('kits').update({ name: 'FUNAAB IMS' }).eq('id', data[0].id)
+          data[0].name = 'FUNAAB IMS'
         }
         
         setKits(data)
@@ -97,13 +97,13 @@ export default function DashboardPage() {
           >
             {kits.map(k => (
               <option key={k.id} value={k.kit_id}>
-                {(k.name === 'New Smart Kit' ? 'Revo IMS' : (k.name || k.kit_id))} ({mqtt.espStatus || k.status})
+                {(k.name === 'New Smart Kit' ? 'FUNAAB IMS' : (k.name || k.kit_id))} ({mqtt.espStatus || k.status})
               </option>
             ))}
           </select>
         ) : (
           <span className={styles.singleKitName}>
-            {(kits[0].name === 'New Smart Kit' ? 'Revo IMS' : (kits[0].name || kits[0].kit_id))}
+            {(kits[0].name === 'New Smart Kit' ? 'FUNAAB IMS' : (kits[0].name || kits[0].kit_id))}
             <span className={`${styles.kitBadge} ${mqtt.espStatus === 'ONLINE' ? styles.online : styles.offline}`}>
               {mqtt.espStatus || kits[0].status}
             </span>

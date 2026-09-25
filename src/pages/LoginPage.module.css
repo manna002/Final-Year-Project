@@ -4,7 +4,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: var(--bg);
+  background: linear-gradient(160deg, #f0f5f0 0%, #dceadc 50%, #c8dcc8 100%);
   position: relative;
   overflow: hidden;
   padding: 24px;
@@ -22,7 +22,7 @@
 .orb1 {
   width: 400px;
   height: 400px;
-  background: var(--green);
+  background: #1a6b3c;
   top: -100px;
   right: -100px;
   animation: float1 12s ease-in-out infinite;
@@ -31,7 +31,7 @@
 .orb2 {
   width: 300px;
   height: 300px;
-  background: var(--blue);
+  background: #2e8b57;
   bottom: -80px;
   left: -80px;
   animation: float2 15s ease-in-out infinite;
@@ -40,7 +40,7 @@
 .orb3 {
   width: 200px;
   height: 200px;
-  background: var(--amber);
+  background: #4ade80;
   top: 50%;
   left: 50%;
   animation: float3 10s ease-in-out infinite;
@@ -67,16 +67,16 @@
   z-index: 1;
   width: 100%;
   max-width: 440px;
-  background: rgba(10, 22, 40, 0.75);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid var(--border);
+  border: 1px solid rgba(26, 107, 60, 0.15);
   border-radius: 20px;
   padding: 40px 32px 32px;
   box-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.3),
-    0 0 0 1px rgba(255, 122, 0, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    0 4px 24px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(26, 107, 60, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
   animation: cardIn 0.5s ease-out;
 }
 
@@ -98,27 +98,29 @@
 }
 
 .logo {
-  width: 56px;
-  height: 56px;
-  background: linear-gradient(135deg, var(--green), #ff9d40);
-  border-radius: 16px;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font);
-  font-weight: 700;
-  font-size: 24px;
-  color: #fff;
   margin-bottom: 12px;
-  box-shadow: 0 4px 16px rgba(255, 122, 0, 0.3);
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(26, 107, 60, 0.2);
+}
+
+.logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .brandName {
   font-family: var(--font);
   font-weight: 700;
-  font-size: 22px;
-  color: var(--text);
-  letter-spacing: 2px;
+  font-size: 20px;
+  color: #1a6b3c;
+  letter-spacing: 1px;
 }
 
 .brandSub {
@@ -167,15 +169,15 @@
 }
 
 .alertError {
-  background: rgba(239, 68, 68, 0.12);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: #dc2626;
 }
 
 .alertSuccess {
-  background: rgba(34, 197, 94, 0.12);
-  border: 1px solid rgba(34, 197, 94, 0.3);
-  color: #86efac;
+  background: rgba(34, 197, 94, 0.08);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  color: #16a34a;
 }
 
 .alertIcon {
@@ -209,7 +211,7 @@
   font-family: var(--font);
   font-size: 14px;
   padding: 12px 14px;
-  background: var(--surface2);
+  background: #ffffff;
   border: 1px solid var(--border);
   border-radius: 10px;
   color: var(--text);
@@ -260,13 +262,13 @@
 
 /* Admin-specific input highlight */
 .inputAdmin {
-  border-color: rgba(139, 92, 246, 0.4);
-  background: rgba(139, 92, 246, 0.06);
+  border-color: rgba(26, 107, 60, 0.4);
+  background: rgba(26, 107, 60, 0.04);
 }
 
 .inputAdmin:focus {
-  border-color: #8b5cf6;
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+  border-color: #1a6b3c;
+  box-shadow: 0 0 0 3px rgba(26, 107, 60, 0.15);
 }
 
 .fieldHint {
@@ -290,7 +292,7 @@
   justify-content: center;
   gap: 8px;
   padding: 12px 8px;
-  background: var(--surface2);
+  background: #ffffff;
   border: 2px solid var(--border);
   border-radius: 12px;
   color: var(--muted);
@@ -302,22 +304,22 @@
 }
 
 .typeBtn:hover {
-  border-color: rgba(255, 255, 255, 0.15);
+  border-color: rgba(26, 107, 60, 0.3);
   color: var(--text);
 }
 
 .typeBtnActive {
   border-color: var(--green);
-  background: rgba(255, 122, 0, 0.08);
+  background: rgba(26, 107, 60, 0.06);
   color: var(--green);
-  box-shadow: 0 0 0 1px rgba(255, 122, 0, 0.15), inset 0 1px 0 rgba(255, 122, 0, 0.06);
+  box-shadow: 0 0 0 1px rgba(26, 107, 60, 0.15), inset 0 1px 0 rgba(26, 107, 60, 0.06);
 }
 
 .typeBtnActiveAdmin {
-  border-color: #8b5cf6;
-  background: rgba(139, 92, 246, 0.08);
-  color: #a78bfa;
-  box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.15), inset 0 1px 0 rgba(139, 92, 246, 0.06);
+  border-color: #145530;
+  background: rgba(20, 85, 48, 0.06);
+  color: #145530;
+  box-shadow: 0 0 0 1px rgba(20, 85, 48, 0.15), inset 0 1px 0 rgba(20, 85, 48, 0.06);
 }
 
 .typeIcon {
@@ -332,7 +334,7 @@
   gap: 8px;
   margin-top: 4px;
   padding: 13px;
-  background: linear-gradient(135deg, var(--green), #ff9d40);
+  background: linear-gradient(135deg, #1a6b3c, #2e8b57);
   border: none;
   border-radius: 10px;
   color: #fff;
@@ -344,7 +346,7 @@
 }
 
 .submitBtnAdmin {
-  background: linear-gradient(135deg, #7c3aed, #a78bfa);
+  background: linear-gradient(135deg, #145530, #1a6b3c);
 }
 
 .submitBtn:hover:not(:disabled) {
@@ -396,7 +398,7 @@
 }
 
 .linkBtn:hover {
-  color: #ff9d40;
+  color: #2e8b57;
   text-decoration: underline;
 }
 
@@ -424,13 +426,12 @@
   }
 
   .logo {
-    width: 48px;
-    height: 48px;
-    font-size: 20px;
+    width: 56px;
+    height: 56px;
   }
 
   .brandName {
-    font-size: 18px;
+    font-size: 16px;
   }
 
   .typeBtn {
