@@ -57,8 +57,15 @@ export default function AuthProvider({ children }) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
     })
-    const data = await res.json()
-    if (!res.ok) throw new Error(data.error || 'Login failed')
+    
+    let data;
+    try {
+      data = await res.json()
+    } catch (err) {
+      throw new Error("Server configuration error (Is MONGODB_URI set in Vercel?)")
+    }
+
+    if (!res.ok) throw new Error(data?.error || 'Login failed')
     
     localStorage.setItem('token', data.token)
     setUser({ id: data.user.id, email: data.user.email })
@@ -78,8 +85,15 @@ export default function AuthProvider({ children }) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password, displayName, accountType: role, adminCode })
     })
-    const data = await res.json()
-    if (!res.ok) throw new Error(data.error || 'Signup failed')
+    
+    let data;
+    try {
+      data = await res.json()
+    } catch (err) {
+      throw new Error("Server configuration error (Is MONGODB_URI set in Vercel?)")
+    }
+
+    if (!res.ok) throw new Error(data?.error || 'Signup failed')
     
     // Auto login after signup
     return login(email, password)

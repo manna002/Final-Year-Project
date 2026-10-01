@@ -20,9 +20,13 @@ app.get('/api/health', (req, res) => {
 });
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('Connected to MongoDB'))
-  .catch((error) => console.error('Error connecting to MongoDB:', error));
+if (process.env.MONGODB_URI) {
+  mongoose.connect(process.env.MONGODB_URI)
+    .then(() => console.log('Connected to MongoDB'))
+    .catch((error) => console.error('Error connecting to MongoDB:', error));
+} else {
+  console.error('CRITICAL WARNING: MONGODB_URI environment variable is missing!');
+}
 
 // Start server if not running in a serverless environment (like Vercel)
 if (process.env.NODE_ENV !== 'production') {
