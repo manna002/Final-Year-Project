@@ -6,6 +6,10 @@ const KitSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
+  kit_id: {
+    type: String,
+    unique: true
+  },
   name: {
     type: String,
     default: 'FUNAAB IMS'

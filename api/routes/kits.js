@@ -45,7 +45,11 @@ router.post('/', auth, async (req, res) => {
     let kit = await Kit.findOne({ kitId: kit_id });
     if (kit) return res.status(400).json({ error: 'Kit already exists' });
     
-    kit = new Kit({ kitId: kit_id, name: name || 'FUNAAB IMS' });
+    kit = new Kit({ 
+      kitId: kit_id, 
+      kit_id: kit_id, // Satisfy orphaned MongoDB index
+      name: name || 'FUNAAB IMS' 
+    });
     await kit.save();
     
     // Map back for frontend
