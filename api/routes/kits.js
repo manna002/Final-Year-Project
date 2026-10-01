@@ -24,7 +24,11 @@ router.get('/', auth, async (req, res) => {
       return res.status(403).json({ error: 'Not authorized' });
     }
     const kits = await Kit.find().sort({ created_at: -1 });
-    res.json(kits);
+    const formattedKits = kits.map(k => ({
+      ...k._doc,
+      kit_id: k.kitId
+    }));
+    res.json(formattedKits);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch kits' });
   }
@@ -38,12 +42,14 @@ router.post('/', auth, async (req, res) => {
     }
     
     const { kit_id, name } = req.body;
-    let kit = await Kit.findOne({ kit_id });
+    let kit = await Kit.findOne({ kitId: kit_id });
     if (kit) return res.status(400).json({ error: 'Kit already exists' });
     
-    kit = new Kit({ kit_id, name: name || 'FUNAAB IMS' });
+    kit = new Kit({ kitId: kit_id, name: name || 'FUNAAB IMS' });
     await kit.save();
-    res.json(kit);
+    
+    // Map back for frontend
+    res.json({ ...kit._doc, kit_id: kit.kitId });
   } catch (error) {
     res.status(500).json({ error: 'Failed to create kit', details: error.message });
   }

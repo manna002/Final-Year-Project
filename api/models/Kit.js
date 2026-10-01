@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const KitSchema = new mongoose.Schema({
-  kit_id: {
+  kitId: {
     type: String,
     required: true,
     unique: true
