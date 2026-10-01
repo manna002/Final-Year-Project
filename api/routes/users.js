@@ -1,35 +1,30 @@
-const express = require('express');
-const User = require('../models/User');
-const jwt = require('jsonwebtoken');
+import express from 'express';
+import User from '../models/User.js';
 
 const router = express.Router();
 
-// Middleware to verify admin token
-const adminMiddleware = (req, res, next) => {
-  const token = req.header('x-auth-token');
-  if (!token) return res.status(401).json({ error: 'No token, authorization denied' });
+// Get all users (Admin only)
+router.get('/', async (req, res) => {
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'super_secret_funaab_key_2026');
-    if (decoded.user.role !== 'admin') {
-      return res.status(403).json({ error: 'Admin access required' });
-    }
-    req.user = decoded.user;
-    next();
-  } catch (err) {
-    res.status(401).json({ error: 'Token is not valid' });
-  }
-};
+    const token = req.header('x-auth-token');
+    if (!token) return res.status(401).json({ error: 'No token provided' });
 
-// GET all users (Admin only)
-router.get('/', adminMiddleware, async (req, res) => {
-  try {
-    // Select all users, excluding their passwords
-    const users = await User.find().select('-password').sort({ createdAt: -1 });
-    res.json(users);
-  } catch (err) {
-    console.error('Error fetching users:', err.message);
-    res.status(500).send('Server Error');
+    import('jsonwebtoken').then(({ default: jwt }) => {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'super_secret_funaab_key_2026');
+      
+      // Basic check if user is admin
+      if (decoded.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Not authorized' });
+      }
+
+      User.find({ role: 'client' }).select('-password')
+        .then(users => res.json(users))
+        .catch(err => res.status(500).json({ error: 'Failed to fetch users' }));
+    });
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).json({ error: 'Server error' });
   }
 });
 
-module.exports = router;
+export default router;

@@ -1,54 +1,51 @@
-const express = require('express');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+import express from 'express';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import User from '../models/User.js';
 
 const router = express.Router();
 
-// User Signup
+// Register a new user
 router.post('/signup', async (req, res) => {
   try {
     const { email, password, displayName, accountType, adminCode } = req.body;
 
-    // Check if user exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ error: 'This email is already registered.' });
-    }
-
-    // Verify admin code if they want to be an admin
-    let finalRole = 'client';
+    // Validate admin code if creating admin
     if (accountType === 'admin') {
-      const validCodes = ['FUNAAB-2026', 'ADM-001'];
-      if (!validCodes.includes(adminCode)) {
-        return res.status(400).json({ error: 'Invalid Admin Access Code' });
+      const validAdminCode = process.env.ADMIN_SIGNUP_CODE || 'funaab_admin_2026';
+      if (adminCode !== validAdminCode) {
+        return res.status(401).json({ error: 'Invalid admin code' });
       }
-      finalRole = 'admin';
     }
 
-    // Hash the password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    // Check if user exists
+    let user = await User.findOne({ email });
+    if (user) {
+      return res.status(400).json({ error: 'User already exists' });
+    }
 
-    // Create new user
-    const newUser = new User({
+    // Create user
+    user = new User({
       email,
-      password: hashedPassword,
+      password,
       displayName,
-      role: finalRole,
-      adminCode: finalRole === 'admin' ? adminCode : ''
+      role: accountType || 'client'
     });
 
-    await newUser.save();
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(password, salt);
 
-    res.status(201).json({ message: 'User created successfully' });
+    await user.save();
+
+    res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
     console.error('Signup error:', error);
-    res.status(500).json({ error: 'Server error during signup', details: error.message, stack: error.stack });
+    res.status(500).json({ error: 'Server error during signup' });
   }
 });
 
-// User Login
+// Login user
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -90,10 +87,11 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Middleware to verify token
-const authMiddleware = (req, res, next) => {
+// Middleware to protect routes
+const auth = (req, res, next) => {
   const token = req.header('x-auth-token');
   if (!token) return res.status(401).json({ error: 'No token, authorization denied' });
+
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'super_secret_funaab_key_2026');
     req.user = decoded.user;
@@ -103,15 +101,15 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
-// Get current user
-router.get('/me', authMiddleware, async (req, res) => {
+// Get current user profile
+router.get('/me', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
     res.json(user);
-  } catch (err) {
-    console.error(err.message);
+  } catch (error) {
+    console.error(error.message);
     res.status(500).send('Server Error');
   }
 });
 
-module.exports = router;
+export default router;
