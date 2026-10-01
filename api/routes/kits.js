@@ -1,5 +1,6 @@
 import express from 'express';
 import Kit from '../models/Kit.js';
+import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 
@@ -11,19 +12,17 @@ router.get('/my-kits', async (req, res) => {
 
     // This would typically use the auth middleware to get req.user.id
     // But we are simplifying to match the current frontend implementation
-    import('jsonwebtoken').then(({ default: jwt }) => {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'super_secret_funaab_key_2026');
-      const userId = decoded.user.id;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'super_secret_funaab_key_2026');
+    const userId = decoded.user.id;
 
-      Kit.find({ ownerId: userId })
-        .then(kits => {
-          res.json(kits);
-        })
-        .catch(err => {
-          console.error(err);
-          res.status(500).json({ error: 'Failed to fetch kits' });
-        });
-    });
+    Kit.find({ ownerId: userId })
+      .then(kits => {
+        res.json(kits);
+      })
+      .catch(err => {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to fetch kits' });
+      });
   } catch (error) {
     console.error('Error fetching kits:', error);
     res.status(500).json({ error: 'Server error' });
