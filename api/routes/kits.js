@@ -45,7 +45,7 @@ router.post('/', auth, async (req, res) => {
     await kit.save();
     res.json(kit);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to create kit' });
+    res.status(500).json({ error: 'Failed to create kit', details: error.message });
   }
 });
 

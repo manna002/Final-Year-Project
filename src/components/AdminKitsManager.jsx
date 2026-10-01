@@ -59,7 +59,7 @@ export default function AdminKitsManager({ users }) {
         })
       })
       const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Failed to add kit')
+      if (!res.ok) throw new Error(data.details ? `${data.error}: ${data.details}` : (data.error || 'Failed to add kit'))
       
       setSuccess('Kit added successfully!')
       setNewKitId('')
