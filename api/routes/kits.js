@@ -4,56 +4,96 @@ import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 
-// Get kits for the authenticated user
-router.get('/my-kits', async (req, res) => {
+// Middleware to verify token
+const auth = (req, res, next) => {
+  const token = req.header('x-auth-token');
+  if (!token) return res.status(401).json({ error: 'No token provided' });
   try {
-    const token = req.header('x-auth-token');
-    if (!token) return res.status(401).json({ error: 'No token provided' });
-
-    // This would typically use the auth middleware to get req.user.id
-    // But we are simplifying to match the current frontend implementation
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'super_secret_funaab_key_2026');
-    const userId = decoded.user.id;
-
-    Kit.find({ ownerId: userId })
-      .then(kits => {
-        res.json(kits);
-      })
-      .catch(err => {
-        console.error(err);
-        res.status(500).json({ error: 'Failed to fetch kits' });
-      });
+    req.user = decoded.user;
+    next();
   } catch (error) {
-    console.error('Error fetching kits:', error);
-    res.status(500).json({ error: 'Server error' });
+    res.status(401).json({ error: 'Invalid token' });
+  }
+};
+
+// GET /api/kits - Fetch all kits (Admin)
+router.get('/', auth, async (req, res) => {
+  try {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Not authorized' });
+    }
+    const kits = await Kit.find().sort({ created_at: -1 });
+    res.json(kits);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch kits' });
   }
 });
 
-// Admin: Assign kit to a user
-router.post('/assign', async (req, res) => {
+// POST /api/kits - Create a new kit (Admin)
+router.post('/', auth, async (req, res) => {
   try {
-    const { kitId, ownerId } = req.body;
-    
-    // Check if kit exists, if not create it
-    let kit = await Kit.findOne({ kitId });
-    
-    if (kit) {
-      kit.ownerId = ownerId;
-      kit.status = 'active';
-      await kit.save();
-    } else {
-      kit = new Kit({
-        kitId,
-        ownerId,
-        status: 'active'
-      });
-      await kit.save();
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Not authorized' });
     }
     
-    res.json({ message: 'Kit assigned successfully', kit });
+    const { kit_id, name } = req.body;
+    let kit = await Kit.findOne({ kit_id });
+    if (kit) return res.status(400).json({ error: 'Kit already exists' });
+    
+    kit = new Kit({ kit_id, name: name || 'FUNAAB IMS' });
+    await kit.save();
+    res.json(kit);
   } catch (error) {
-    console.error('Error assigning kit:', error);
-    res.status(500).json({ error: 'Failed to assign kit' });
+    res.status(500).json({ error: 'Failed to create kit' });
+  }
+});
+
+// PUT /api/kits/:id - Assign kit to user (Admin)
+router.put('/:id', auth, async (req, res) => {
+  try {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Not authorized' });
+    }
+    
+    const { owner_id } = req.body;
+    const kit = await Kit.findByIdAndUpdate(
+      req.params.id, 
+      { owner_id: owner_id || null }, 
+      { new: true }
+    );
+    if (!kit) return res.status(404).json({ error: 'Kit not found' });
+    res.json(kit);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update kit' });
+  }
+});
+
+// DELETE /api/kits/:id - Delete a kit (Admin)
+router.delete('/:id', auth, async (req, res) => {
+  try {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Not authorized' });
+    }
+    await Kit.findByIdAndDelete(req.params.id);
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete kit' });
+  }
+});
+
+// GET /api/kits/my-kits - Fetch kits for logged in client
+router.get('/my-kits', auth, async (req, res) => {
+  try {
+    const kits = await Kit.find({ owner_id: req.user.id });
+    // Make sure we map kit_id to kitId for the frontend backwards compatibility if needed
+    const formattedKits = kits.map(k => ({
+      ...k._doc,
+      kitId: k.kit_id
+    }));
+    res.json(formattedKits);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch your kits' });
   }
 });
 

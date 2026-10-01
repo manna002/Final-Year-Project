@@ -1,22 +1,26 @@
 import mongoose from 'mongoose';
 
 const KitSchema = new mongoose.Schema({
-  kitId: {
+  kit_id: {
     type: String,
     required: true,
     unique: true
   },
-  ownerId: {
+  name: {
+    type: String,
+    default: 'FUNAAB IMS'
+  },
+  owner_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true
+    default: null
   },
   status: {
     type: String,
     enum: ['active', 'inactive', 'maintenance'],
     default: 'active'
   },
-  assignedAt: {
+  created_at: {
     type: Date,
     default: Date.now
   }
