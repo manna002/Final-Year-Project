@@ -65,7 +65,7 @@ export default function AuthProvider({ children }) {
       throw new Error("Server configuration error (Is MONGODB_URI set in Vercel?)")
     }
 
-    if (!res.ok) throw new Error(data?.error || 'Login failed')
+    if (!res.ok) throw new Error(data?.details ? `${data.error}: ${data.details}` : (data?.error || 'Login failed'))
     
     localStorage.setItem('token', data.token)
     setUser({ id: data.user.id, email: data.user.email })
