@@ -22,9 +22,12 @@ export default function useMqtt(kitId) {
     totalflow:   null,
   })
   const [relayState,  setRelayState]  = useState('OFF')
+  const [tankState,   setTankState]   = useState('OFF')
+  const [fanState,    setFanState]    = useState('OFF')
   const [mode,        setMode]        = useState('MANUAL')
   const [threshLow,   setThreshLow]   = useState('20')
   const [threshHigh,  setThreshHigh]  = useState('60')
+  const [threshFan,   setThreshFan]   = useState('30')
   const [timersJson,  setTimersJson]  = useState(null)
   const [currentTime, setCurrentTime] = useState(null)
   const [logs,        setLogs]        = useState([])
@@ -49,10 +52,13 @@ export default function useMqtt(kitId) {
       `${base}/sensor/flowrate`,
       `${base}/sensor/totalflow`,
       `${base}/relay/state`,
+      `${base}/tank/state`,
+      `${base}/fan/state`,
       `${base}/mode/state`,
       `${base}/time/current`,
       `${base}/threshold/low`,
       `${base}/threshold/high`,
+      `${base}/threshold/fan`,
       `${base}/timers/state`,
       `${base}/alert`,
       `${base}/log`,
@@ -107,6 +113,12 @@ export default function useMqtt(kitId) {
         case `${base}/relay/state`:
           setRelayState(msg)
           break
+        case `${base}/tank/state`:
+          setTankState(msg)
+          break
+        case `${base}/fan/state`:
+          setFanState(msg)
+          break
         case `${base}/mode/state`:
           setMode(msg)
           break
@@ -118,6 +130,9 @@ export default function useMqtt(kitId) {
           break
         case `${base}/threshold/high`:
           setThreshHigh(msg)
+          break
+        case `${base}/threshold/fan`:
+          setThreshFan(msg)
           break
         case `${base}/timers/state`:
           setTimersJson(msg)
@@ -172,8 +187,8 @@ export default function useMqtt(kitId) {
   }, [])
 
   return {
-    connected, sensors, relayState, mode,
-    threshLow, threshHigh, timersJson, currentTime,
+    connected, sensors, relayState, tankState, fanState, mode,
+    threshLow, threshHigh, threshFan, timersJson, currentTime,
     logs, alerts, feedback,
     tempHistory, moistHistory, espStatus,
     publish,

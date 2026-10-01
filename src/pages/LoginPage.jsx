@@ -73,18 +73,8 @@ export default function LoginPage() {
       }
 
       // Login
-      const { user: loggedInUser } = await login(cleanEmail, password)
-
-      // Fetch the profile directly from the database to get definitive role
-      let role = 'client'
-      if (loggedInUser) {
-        const { data: prof } = await (await import('../lib/supabase')).default
-          .from('profiles')
-          .select('role')
-          .eq('id', loggedInUser.id)
-          .single()
-        role = prof?.role || loggedInUser?.user_metadata?.role || 'client'
-      }
+      const data = await login(cleanEmail, password)
+      const role = data.user.role || 'client'
       navigate(role === 'admin' ? '/admin' : '/')
     } catch (err) {
       const msg = err?.message || 'Something went wrong'

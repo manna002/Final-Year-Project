@@ -1,10 +1,11 @@
 import { useRef } from 'react'
+import { Droplet, Fan, Container } from 'lucide-react'
 import { logActivity } from '../lib/activityLogger'
 import styles from './PumpControl.module.css'
 
 const MODES = ['MANUAL', 'AUTO', 'TIMER']
 
-export default function PumpControl({ kitId, relayState, mode, publish, connected, user, profile }) {
+export default function PumpControl({ kitId, relayState, tankState, fanState, mode, publish, connected, user, profile }) {
   const isManual = mode === 'MANUAL'
 
   function changeMode(m) {
@@ -29,6 +30,30 @@ export default function PumpControl({ kitId, relayState, mode, publish, connecte
     if (user) {
       const action = cmd === 'ON' ? 'PUMP_ON' : cmd === 'OFF' ? 'PUMP_OFF' : 'PUMP_TOGGLE'
       logActivity(user.id, user.email, action, `Pump ${cmd}`, profile?.device_id || kitId)
+    }
+  }
+
+  function controlTank(cmd) {
+    if (!kitId) return
+    const now = Date.now()
+    if (now - lastToggleRef.current < 500) return
+    lastToggleRef.current = now
+
+    publish(`${kitId}/tank/state`, cmd)
+    if (user) {
+      logActivity(user.id, user.email, cmd === 'ON' ? 'PUMP_ON' : 'PUMP_OFF', `Tank filling ${cmd}`, profile?.device_id || kitId)
+    }
+  }
+
+  function controlFan(cmd) {
+    if (!kitId) return
+    const now = Date.now()
+    if (now - lastToggleRef.current < 500) return
+    lastToggleRef.current = now
+
+    publish(`${kitId}/fan/state`, cmd)
+    if (user) {
+      logActivity(user.id, user.email, cmd === 'ON' ? 'PUMP_ON' : 'PUMP_OFF', `Fan power ${cmd}`, profile?.device_id || kitId)
     }
   }
 
@@ -61,9 +86,12 @@ export default function PumpControl({ kitId, relayState, mode, publish, connecte
         </div>
       </div>
 
-      {/* PUMP STATE */}
+      {/* IRRIGATION VALVE */}
       <div className={styles.section}>
-        <div className={styles.label}>Irrigation Valve</div>
+        <div className={styles.label}>
+          <Droplet size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '6px' }} />
+          Irrigation Valve
+        </div>
         <div className={styles.pumpRow}>
           <div className={`${styles.pumpIndicator} ${relayState === 'ON' ? styles.pumpOn : styles.pumpOff}`}>
             <span className={styles.pumpDot} />
@@ -92,6 +120,74 @@ export default function PumpControl({ kitId, relayState, mode, publish, connecte
         )}
       </div>
 
+      {/* TANK FILLING */}
+      <div className={styles.section}>
+        <div className={styles.label}>
+          <Container size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '6px' }} />
+          Tank Filling
+        </div>
+        <div className={styles.pumpRow}>
+          <div className={`${styles.pumpIndicator} ${tankState === 'ON' ? styles.pumpOn : styles.pumpOff}`}>
+            <span className={styles.pumpDot} />
+            {tankState || 'OFF'}
+          </div>
+          {!isManual && (
+            <div className={styles.autoNote}>
+              Tank controlled by {mode} mode
+            </div>
+          )}
+        </div>
+
+        {isManual && (
+          <div className={styles.switchWrapper}>
+            <span className={styles.switchLabel}>Tank Fill Power</span>
+            <label className={`${styles.switch} ${!connected ? styles.disabled : ''}`}>
+              <input
+                type="checkbox"
+                checked={tankState === 'ON'}
+                onChange={(e) => controlTank(e.target.checked ? 'ON' : 'OFF')}
+                disabled={!connected}
+              />
+              <span className={styles.slider}></span>
+            </label>
+          </div>
+        )}
+      </div>
+
+      {/* FAN POWER */}
+      <div className={styles.section}>
+        <div className={styles.label}>
+          <Fan size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '6px' }} />
+          Fan Power
+        </div>
+        <div className={styles.pumpRow}>
+          <div className={`${styles.pumpIndicator} ${fanState === 'ON' ? styles.pumpOn : styles.pumpOff}`}>
+            <span className={styles.pumpDot} />
+            {fanState || 'OFF'}
+          </div>
+          {!isManual && (
+            <div className={styles.autoNote}>
+              Fan controlled by {mode} mode
+            </div>
+          )}
+        </div>
+        
+        {isManual && (
+          <div className={styles.switchWrapper}>
+            <span className={styles.switchLabel}>Fan Power</span>
+            <label className={`${styles.switch} ${!connected ? styles.disabled : ''}`}>
+              <input
+                type="checkbox"
+                checked={fanState === 'ON'}
+                onChange={(e) => controlFan(e.target.checked ? 'ON' : 'OFF')}
+                disabled={!connected}
+              />
+              <span className={styles.slider}></span>
+            </label>
+          </div>
+        )}
+      </div>
+
       {/* FLOW RESET */}
       <div className={styles.section}>
         <button
@@ -105,3 +201,4 @@ export default function PumpControl({ kitId, relayState, mode, publish, connecte
     </div>
   )
 }
+

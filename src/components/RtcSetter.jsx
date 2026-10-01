@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { RotateCcw, Check } from 'lucide-react'
 import { logActivity } from '../lib/activityLogger'
 import styles from './RtcSetter.module.css'
 
@@ -88,14 +89,14 @@ export default function RtcSetter({ kitId, publish, connected, user, profile }) 
 
       <div className={styles.btnRow}>
         <button className={styles.nowBtn} onClick={fillNow}>
-          ⟳ Use Current Time
+          <RotateCcw size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }} /> Use Current Time
         </button>
         <button
           className={`${styles.sendBtn} ${sent ? styles.sendBtnDone : ''}`}
           onClick={send}
           disabled={!connected}
         >
-          {sent ? '✓ Time Set' : 'Set RTC Time'}
+          {sent ? <><Check size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }} /> Time Set</> : 'Set RTC Time'}
         </button>
       </div>
     </div>

@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
+import { Check } from 'lucide-react'
 import { logActivity } from '../lib/activityLogger'
 import styles from './TimerSlots.module.css'
 
-const DEFAULT_SLOTS = Array.from({ length: 15 }, (_, i) => ({
+const DEFAULT_SLOTS = Array.from({ length: 7 }, (_, i) => ({
   slot: i + 1, hour: 6, minute: 0, duration: 30, enabled: false
 }))
 
@@ -14,7 +15,8 @@ export default function TimerSlots({ kitId, timersJson, publish, connected, user
     if (!timersJson) return
     try {
       const parsed = JSON.parse(timersJson)
-      setSlots(parsed)
+      // Ensure we only ever show up to 7 slots, even if the hardware sends more
+      setSlots(parsed.slice(0, 7))
     } catch {}
   }, [timersJson])
 
@@ -48,10 +50,10 @@ export default function TimerSlots({ kitId, timersJson, publish, connected, user
 
   function clearAll() {
     if (!kitId) return
-    if (window.confirm('Clear all 15 timer slots?')) {
+    if (window.confirm('Clear all 7 timer slots?')) {
       publish(`${kitId}/timers/clearall`, '1')
       if (user) {
-        logActivity(user.id, user.email, 'TIMER_CLEAR_ALL', 'All 15 timer slots cleared', profile?.device_id || kitId)
+        logActivity(user.id, user.email, 'TIMER_CLEAR_ALL', 'All 7 timer slots cleared', profile?.device_id || kitId)
       }
     }
   }
@@ -59,7 +61,7 @@ export default function TimerSlots({ kitId, timersJson, publish, connected, user
   return (
     <div className={styles.wrap}>
       <div className={styles.header}>
-        <div className={styles.title}>Timer Slots (15 max)</div>
+        <div className={styles.title}>Timer Slots</div>
         <button className={styles.clearBtn} onClick={clearAll} disabled={!connected}>
           Clear All
         </button>
@@ -130,7 +132,7 @@ export default function TimerSlots({ kitId, timersJson, publish, connected, user
                 onClick={() => sendSlot(i)}
                 disabled={!connected}
               >
-                {saved === i ? '✓ Saved' : 'Save'}
+                {saved === i ? <><Check size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }} /> Saved</> : 'Save'}
               </button>
             </div>
           </div>

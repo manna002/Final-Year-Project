@@ -27,39 +27,32 @@ export default function DashboardPage() {
     if (!user?.id) return
     
     async function fetchKits() {
-      const { data, error } = await supabase
-        .from('kits')
-        .select('*')
-        .eq('owner_id', user.id)
-      
-      if (data && data.length > 0) {
-        // Automatically rename the kit to "FUNAAB IMS" permanently in the database
-        if (data[0].id && data[0].name !== 'FUNAAB IMS') {
-          await supabase.from('kits').update({ name: 'FUNAAB IMS' }).eq('id', data[0].id)
-          data[0].name = 'FUNAAB IMS'
-        }
+      try {
+        const token = localStorage.getItem('token')
+        const res = await fetch('http://localhost:5000/api/kits/my-kits', {
+          headers: { 'x-auth-token': token }
+        })
         
-        setKits(data)
-        setSelectedKitId(data[0].kit_id)
+        if (res.ok) {
+          const data = await res.json()
+          
+          if (data && data.length > 0) {
+            // Map MongoDB _id to id to avoid breaking the rest of the app
+            const mappedData = data.map(k => ({ ...k, id: k._id }))
+            setKits(mappedData)
+            setSelectedKitId(mappedData[0].kit_id)
+          }
+        }
+      } catch (err) {
+        console.error('Error fetching kits:', err)
+      } finally {
+        setLoadingKits(false)
       }
-      setLoadingKits(false)
     }
     fetchKits()
 
-    // Subscribe to realtime updates so the Online/Offline badge updates instantly
-    const channel = supabase.channel('schema-db-changes')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'kits', filter: `owner_id=eq.${user.id}` },
-        (payload) => {
-          setKits(prev => prev.map(k => k.id === payload.new.id ? { ...k, ...payload.new } : k))
-        }
-      )
-      .subscribe()
-
-    return () => {
-      supabase.removeChannel(channel)
-    }
+    // Without Supabase, we don't have realtime postgres_changes for kits. 
+    // If you need realtime, you'd wire it via Socket.io. For now, it fetches on mount.
   }, [user?.id])
 
   // Initialize MQTT connection with the selected kit
@@ -152,6 +145,8 @@ export default function DashboardPage() {
             <PumpControl
               kitId={selectedKitId}
               relayState={mqtt.relayState}
+              tankState={mqtt.tankState}
+              fanState={mqtt.fanState}
               mode={mqtt.mode}
               publish={mqtt.publish}
               connected={mqtt.connected}
@@ -162,6 +157,7 @@ export default function DashboardPage() {
               kitId={selectedKitId}
               threshLow={mqtt.threshLow}
               threshHigh={mqtt.threshHigh}
+              threshFan={mqtt.threshFan}
               publish={mqtt.publish}
               connected={mqtt.connected}
               user={user}
@@ -176,7 +172,6 @@ export default function DashboardPage() {
             />
           </div>
         )}
-
         {tab === 'Timers' && (
           <TimerSlots
             kitId={selectedKitId}

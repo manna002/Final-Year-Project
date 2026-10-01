@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
-import supabase from '../lib/supabase'
 import AdminLiveMonitor from './AdminLiveMonitor'
 import styles from './AdminKitsManager.module.css'
+
+const API_URL = 'http://localhost:5000/api'
 
 export default function AdminKitsManager({ users }) {
   const [kits, setKits] = useState([])
@@ -18,17 +19,20 @@ export default function AdminKitsManager({ users }) {
 
   async function fetchKits() {
     setLoading(true)
-    const { data, error } = await supabase
-      .from('kits')
-      .select('*')
-      .order('created_at', { ascending: false })
-    
-    if (error) {
-      console.error('Error fetching kits:', error)
-    } else {
+    try {
+      const token = localStorage.getItem('token')
+      const res = await fetch(`${API_URL}/kits`, {
+        headers: { 'x-auth-token': token }
+      })
+      if (!res.ok) throw new Error('Failed to fetch kits')
+      const data = await res.json()
       setKits(data || [])
+    } catch (err) {
+      console.error('Error fetching kits:', err)
+      setError(err.message)
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   async function handleAddKit(e) {
@@ -41,50 +45,65 @@ export default function AdminKitsManager({ users }) {
       return
     }
 
-    const { data, error } = await supabase
-      .from('kits')
-      .insert({
-        kit_id: newKitId.trim(),
-        name: newKitName.trim() || 'FUNAAB IMS'
+    try {
+      const token = localStorage.getItem('token')
+      const res = await fetch(`${API_URL}/kits`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-auth-token': token 
+        },
+        body: JSON.stringify({
+          kit_id: newKitId.trim(),
+          name: newKitName.trim() || 'FUNAAB IMS'
+        })
       })
-      .select()
-
-    if (error) {
-      setError(error.message)
-    } else {
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Failed to add kit')
+      
       setSuccess('Kit added successfully!')
       setNewKitId('')
       setNewKitName('')
-      setKits([data[0], ...kits])
+      setKits([data, ...kits])
+    } catch (err) {
+      setError(err.message)
     }
   }
 
   async function handleAssignUser(kitId, userId) {
-    const { error } = await supabase
-      .from('kits')
-      .update({ owner_id: userId || null })
-      .eq('id', kitId)
-
-    if (error) {
-      alert('Failed to assign kit: ' + error.message)
-    } else {
-      setKits(kits.map(k => k.id === kitId ? { ...k, owner_id: userId || null } : k))
+    try {
+      const token = localStorage.getItem('token')
+      const res = await fetch(`${API_URL}/kits/${kitId}`, {
+        method: 'PUT',
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-auth-token': token 
+        },
+        body: JSON.stringify({ owner_id: userId || null })
+      })
+      if (!res.ok) throw new Error('Failed to assign user')
+      const updatedKit = await res.json()
+      setKits(kits.map(k => k._id === kitId ? updatedKit : k))
+    } catch (err) {
+      alert('Failed to assign kit: ' + err.message)
     }
   }
 
   async function handleDeleteKit(kitId) {
     if (!window.confirm('Are you sure you want to delete this kit?')) return
 
-    const { error } = await supabase
-      .from('kits')
-      .delete()
-      .eq('id', kitId)
-
-    if (error) {
-      alert('Failed to delete kit: ' + error.message)
-    } else {
-      setKits(kits.filter(k => k.id !== kitId))
-      if (viewingKit?.id === kitId) setViewingKit(null)
+    try {
+      const token = localStorage.getItem('token')
+      const res = await fetch(`${API_URL}/kits/${kitId}`, {
+        method: 'DELETE',
+        headers: { 'x-auth-token': token }
+      })
+      if (!res.ok) throw new Error('Failed to delete kit')
+      
+      setKits(kits.filter(k => k._id !== kitId))
+      if (viewingKit?._id === kitId) setViewingKit(null)
+    } catch (err) {
+      alert('Failed to delete kit: ' + err.message)
     }
   }
 
@@ -149,24 +168,24 @@ export default function AdminKitsManager({ users }) {
               </thead>
               <tbody>
                 {kits.map(kit => (
-                  <tr key={kit.id}>
+                  <tr key={kit._id}>
                     <td className={styles.kitId}>{kit.kit_id}</td>
                     <td>{kit.name}</td>
                     <td>
-                      <span className={`${styles.badge} ${kit.status === 'online' ? styles.badgeOnline : styles.badgeOffline}`}>
-                        {kit.status}
+                      <span className={`${styles.statusBadge} ${kit.status === 'ONLINE' ? styles.online : styles.offline}`}>
+                        {kit.status || 'OFFLINE'}
                       </span>
                     </td>
                     <td>
                       <select 
+                        value={kit.owner_id?._id || kit.owner_id || ''} 
+                        onChange={(e) => handleAssignUser(kit._id, e.target.value)}
                         className={styles.select}
-                        value={kit.owner_id || ''}
-                        onChange={(e) => handleAssignUser(kit.id, e.target.value)}
                       >
                         <option value="">-- Unassigned --</option>
-                        {users.filter(u => u.role === 'client').map(u => (
-                          <option key={u.id} value={u.id}>
-                            {u.display_name} ({u.email})
+                        {users.map(u => (
+                          <option key={u.id || u._id} value={u.id || u._id}>
+                            {u.display_name || u.displayName} ({u.email})
                           </option>
                         ))}
                       </select>
@@ -181,7 +200,7 @@ export default function AdminKitsManager({ users }) {
                         </button>
                         <button 
                           className={styles.btnDelete}
-                          onClick={() => handleDeleteKit(kit.id)}
+                          onClick={() => handleDeleteKit(kit._id)}
                         >
                           Delete
                         </button>

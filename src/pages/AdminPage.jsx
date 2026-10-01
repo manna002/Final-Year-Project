@@ -17,47 +17,30 @@ export default function AdminPage() {
   // Fetch all user profiles
   useEffect(() => {
     async function fetchUsers() {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .order('created_at', { ascending: false })
-
-      if (!error && data) setUsers(data)
-      setLoadingUsers(false)
-    }
-    fetchUsers()
-  }, [])
-
-  // Fetch activities + subscribe to realtime
-  useEffect(() => {
-    async function fetchActivities() {
-      const { data, error } = await supabase
-        .from('activities')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(200)
-
-      if (!error && data) setActivities(data)
-      setLoadingActivities(false)
-    }
-    fetchActivities()
-
-    // Real-time subscription for new activities
-    const channel = supabase
-      .channel('admin-activities')
-      .on(
-        'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'activities' },
-        (payload) => {
-          setActivities(prev => [payload.new, ...prev].slice(0, 200))
+      try {
+        const token = localStorage.getItem('token');
+        const res = await fetch('http://localhost:5000/api/users', {
+          headers: { 'x-auth-token': token }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          // Map MongoDB _id to id so other components don't break
+          const mappedUsers = data.map(u => ({ ...u, id: u._id, display_name: u.displayName }));
+          setUsers(mappedUsers);
         }
-      )
-      .subscribe()
-
-    return () => {
-      supabase.removeChannel(channel)
+      } catch (err) {
+        console.error('Error fetching users:', err);
+      }
+      setLoadingUsers(false);
     }
-  }, [])
+    fetchUsers();
+  }, []);
+
+  // Fetch activities (Dummy data for now since Supabase is removed)
+  useEffect(() => {
+    setActivities([]);
+    setLoadingActivities(false);
+  }, []);
 
   // Compute stats
   const now = new Date()

@@ -1,20 +1,8 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react'
-import supabase from '../lib/supabase'
-import { logActivity } from '../lib/activityLogger'
 
 const AuthContext = createContext(null)
 
-// Pre-registered admin access codes. Company workers must enter one of these
-// during signup to register as an admin. Add more codes here or manage them
-// in the Supabase admin_codes table later.
-const VALID_ADMIN_CODES = [
-  'FUNAAB-2026',
-  'ADM-001',
-  'ADM-002',
-  'ADM-003',
-  'ADM-004',
-  'ADM-005',
-]
+const API_URL = 'http://localhost:5000/api'
 
 export function useAuth() {
   const ctx = useContext(AuthContext)
@@ -22,138 +10,91 @@ export function useAuth() {
   return ctx
 }
 
-export function validateAdminCode(code) {
-  return VALID_ADMIN_CODES.includes(code.trim().toUpperCase())
-}
-
 export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  // Fetch profile from the profiles table, auto-upsert if missing
-  const fetchProfile = useCallback(async (userId, userEmail, userMeta) => {
-    let { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', userId)
-      .single()
-
-    if (error || !data) {
-      // Profile missing — create one with role from user_metadata (set during signup)
-      const signupRole = userMeta?.role || 'client'
-      const newProfile = {
-        id: userId,
-        email: userEmail || '',
-        display_name: userMeta?.display_name || (userEmail ? userEmail.split('@')[0] : 'User'),
-        role: signupRole,
-        employee_id: userMeta?.employee_id || null,
-        last_login: new Date().toISOString(),
-      }
-      const { data: upserted } = await supabase
-        .from('profiles')
-        .upsert(newProfile)
-        .select()
-        .single()
-      return upserted || newProfile
-    }
-    return data
-  }, [])
-
-  // Update last_login timestamp
-  const updateLastLogin = useCallback(async (userId) => {
-    await supabase
-      .from('profiles')
-      .update({ last_login: new Date().toISOString() })
-      .eq('id', userId)
-  }, [])
-
+  // Verify token on load
   useEffect(() => {
-    // Check initial session
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      if (session?.user) {
-        setUser(session.user)
-        const prof = await fetchProfile(session.user.id, session.user.email, session.user.user_metadata)
-        setProfile(prof)
-      }
-      setLoading(false)
-    })
-
-    // Listen to auth state changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (session?.user) {
-          setUser(session.user)
-          const prof = await fetchProfile(session.user.id, session.user.email, session.user.user_metadata)
-          setProfile(prof)
-
-          if (event === 'SIGNED_IN') {
-            await updateLastLogin(session.user.id)
-            await logActivity(
-              session.user.id,
-              session.user.email,
-              'LOGIN',
-              `User signed in as ${prof?.role || 'client'}`
-            )
-          }
-        } else {
+    const token = localStorage.getItem('token')
+    if (token) {
+      fetch(`${API_URL}/auth/me`, {
+        headers: { 'x-auth-token': token }
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.error) {
+          localStorage.removeItem('token')
           setUser(null)
           setProfile(null)
+        } else {
+          // Normalize to look like old supabase user object for compatibility
+          const userData = { id: data._id, email: data.email }
+          setUser(userData)
+          setProfile({
+            id: data._id,
+            email: data.email,
+            display_name: data.displayName,
+            role: data.role
+          })
         }
-        setLoading(false)
-      }
-    )
-
-    return () => subscription.unsubscribe()
-  }, [fetchProfile, updateLastLogin])
+      })
+      .catch(err => {
+        console.error(err)
+        localStorage.removeItem('token')
+      })
+      .finally(() => setLoading(false))
+    } else {
+      setLoading(false)
+    }
+  }, [])
 
   // Login with email + password
   const login = useCallback(async (email, password) => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+    const res = await fetch(`${API_URL}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
     })
-    if (error) throw error
+    const data = await res.json()
+    if (!res.ok) throw new Error(data.error || 'Login failed')
+    
+    localStorage.setItem('token', data.token)
+    setUser({ id: data.user.id, email: data.user.email })
+    setProfile({
+      id: data.user.id,
+      email: data.user.email,
+      display_name: data.user.displayName,
+      role: data.user.role
+    })
     return data
   }, [])
 
-  // Sign up with email + password + display name + optional role/adminCode
+  // Sign up with email + password
   const signup = useCallback(async (email, password, displayName, role = 'client', adminCode = '') => {
-    // Validate admin code if registering as admin
-    if (role === 'admin') {
-      if (!validateAdminCode(adminCode)) {
-        throw new Error('Invalid Admin Access Code. Please contact your company administrator.')
-      }
-    }
-
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          display_name: displayName,
-          role: role,
-          employee_id: role === 'admin' ? adminCode.trim().toUpperCase() : null,
-        },
-      },
+    const res = await fetch(`${API_URL}/auth/signup`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password, displayName, accountType: role, adminCode })
     })
-    if (error) throw error
-    return data
-  }, [])
+    const data = await res.json()
+    if (!res.ok) throw new Error(data.error || 'Signup failed')
+    
+    // Auto login after signup
+    return login(email, password)
+  }, [login])
 
   // Logout
   const logout = useCallback(async () => {
-    if (user) {
-      await logActivity(user.id, user.email, 'LOGOUT', 'User signed out')
-    }
-    const { error } = await supabase.auth.signOut()
-    if (error) throw error
-  }, [user])
+    localStorage.removeItem('token')
+    setUser(null)
+    setProfile(null)
+  }, [])
 
-  // Reset password
+  // Reset password (not implemented in custom backend yet)
   const resetPassword = useCallback(async (email) => {
-    const { error } = await supabase.auth.resetPasswordForEmail(email)
-    if (error) throw error
+    throw new Error("Password reset not available in MongoDB version yet. Contact Admin.")
   }, [])
 
   const value = {
