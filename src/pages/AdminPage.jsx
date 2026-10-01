@@ -19,7 +19,8 @@ export default function AdminPage() {
     async function fetchUsers() {
       try {
         const token = localStorage.getItem('token');
-        const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/users`, {
+        const baseUrl = import.meta.env.PROD ? '/api' : (import.meta.env.VITE_API_URL || 'http://localhost:5000/api')
+        const res = await fetch(`${baseUrl}/users`, {
           headers: { 'x-auth-token': token }
         });
         if (res.ok) {

@@ -29,7 +29,8 @@ export default function DashboardPage() {
     async function fetchKits() {
       try {
         const token = localStorage.getItem('token')
-        const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/kits/my-kits`, {
+        const baseUrl = import.meta.env.PROD ? '/api' : (import.meta.env.VITE_API_URL || 'http://localhost:5000/api')
+        const res = await fetch(`${baseUrl}/kits/my-kits`, {
           headers: { 'x-auth-token': token }
         })
         
