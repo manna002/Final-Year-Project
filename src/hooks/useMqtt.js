@@ -2,9 +2,9 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import mqtt from 'mqtt'
 
 // Allow fallback to the public broker during transition, but prefer Private Broker env vars
-const BROKER = import.meta.env.VITE_MQTT_BROKER || 'wss://broker.hivemq.com:8884/mqtt'
-const USERNAME = import.meta.env.VITE_MQTT_USERNAME || ''
-const PASSWORD = import.meta.env.VITE_MQTT_PASSWORD || ''
+const BROKER = (import.meta.env.VITE_MQTT_BROKER || 'wss://broker.hivemq.com:8884/mqtt').trim()
+const USERNAME = (import.meta.env.VITE_MQTT_USERNAME || '').trim()
+const PASSWORD = (import.meta.env.VITE_MQTT_PASSWORD || '').trim()
 
 const CLIENT_ID = 'FUNAAB_DASH_' + Math.random().toString(16).slice(2, 8)
 
