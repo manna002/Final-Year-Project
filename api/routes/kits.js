@@ -4,6 +4,19 @@ import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 
+// Normalize kit IDs so they always match the ESP32 firmware topics.
+// - trims spaces and uppercases
+// - in the last segment, letter "O" is converted to digit "0" if the result is all digits
+//   e.g. "funaab-kit-OO1" -> "FUNAAB-KIT-001"
+function normalizeKitId(raw) {
+  const id = String(raw || '').trim().toUpperCase().replace(/\s+/g, '');
+  const parts = id.split('-');
+  const last = parts.pop() || '';
+  const fixed = last.replace(/O/g, '0');
+  parts.push(/^\d+$/.test(fixed) ? fixed : last);
+  return parts.join('-');
+}
+
 // Middleware to verify token
 const auth = (req, res, next) => {
   const token = req.header('x-auth-token');
@@ -41,7 +54,12 @@ router.post('/', auth, async (req, res) => {
       return res.status(403).json({ error: 'Not authorized' });
     }
     
-    const { kit_id, name } = req.body;
+    const { name } = req.body;
+    const kit_id = normalizeKitId(req.body.kit_id);
+    if (!/^[A-Z0-9]+(-[A-Z0-9]+)*$/.test(kit_id)) {
+      return res.status(400).json({ error: 'Kit ID may only contain letters, digits and hyphens (e.g. FUNAAB-KIT-001)' });
+    }
+
     let kit = await Kit.findOne({ kitId: kit_id });
     if (kit) return res.status(400).json({ error: 'Kit already exists' });
     

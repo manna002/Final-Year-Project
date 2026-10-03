@@ -15,7 +15,7 @@ const int   mqtt_port = 8883; // 8883 is for Secure MQTT (TLS/SSL)
 const char* mqtt_user = "YOUR_MQTT_USERNAME"; 
 const char* mqtt_pass = "YOUR_MQTT_PASSWORD"; 
 
-const char* kit_id = "FUNAAB-KIT-001"; // Change this if uploading to KIT-002
+const char* kitId = "FUNAAB-KIT-001"; // Digits zero-zero-one. Change for KIT-002 etc.
 
 // ---------------------------------------------------------
 // 2. Hardware Pins
