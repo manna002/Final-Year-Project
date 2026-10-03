@@ -41,7 +41,9 @@ export default function DashboardPage() {
             // Map MongoDB _id to id to avoid breaking the rest of the app
             const mappedData = data.map(k => ({ ...k, id: k._id }))
             setKits(mappedData)
-            setSelectedKitId(mappedData[0].kit_id)
+            const activeKitId = mappedData[0].kit_id || mappedData[0].kitId
+            console.log('Selected Kit ID for MQTT:', activeKitId, 'Raw kit data:', mappedData[0])
+            setSelectedKitId(activeKitId)
           }
         }
       } catch (err) {

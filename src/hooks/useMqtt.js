@@ -82,17 +82,22 @@ export default function useMqtt(kitId) {
 
     client.on('connect', () => {
       console.log('Successfully connected to MQTT Broker!')
+      console.log('Subscribing to topics with base:', base)
       setConnected(true)
-      TOPICS.forEach(t => client.subscribe(t))
+      TOPICS.forEach(t => {
+        client.subscribe(t)
+        console.log('  Subscribed:', t)
+      })
     })
 
     client.on('disconnect', () => setConnected(false))
-    client.on('error', ()    => setConnected(false))
+    client.on('error', (err)  => { console.error('MQTT Error:', err); setConnected(false) })
     client.on('offline', ()  => setConnected(false))
 
     client.on('message', (topic, payload) => {
       const msg = payload.toString()
       const ts  = new Date().toLocaleTimeString()
+      console.log('MQTT Message received:', topic, '=', msg)
 
       switch (topic) {
         case `${base}/sensor/temperature`:
