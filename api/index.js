@@ -2,9 +2,21 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 
+import connectDB from './lib/mongodb.js';
+
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+// Ensure DB is connected before handling any requests
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    res.status(500).json({ error: 'Database connection failed', details: error.message });
+  }
+});
 
 // Import routes
 import authRoutes from './routes/auth.js';
@@ -19,15 +31,6 @@ app.use('/api/users', userRoutes);
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Backend is running', hasMongoURI: !!process.env.MONGODB_URI });
 });
-
-// Connect to MongoDB
-if (process.env.MONGODB_URI) {
-  mongoose.connect(process.env.MONGODB_URI)
-    .then(() => console.log('Connected to MongoDB'))
-    .catch((error) => console.error('Error connecting to MongoDB:', error));
-} else {
-  console.error('MONGODB_URI is missing!');
-}
 
 // Start server locally
 if (process.env.NODE_ENV !== 'production') {
