@@ -88,10 +88,6 @@ export default function App() {
                   }
                 />
               </Routes>
-
-              <footer className={styles.footer}>
-                © 2026 FUNAAB — Federal University of Agriculture, Abeokuta
-              </footer>
             </div>
           </ProtectedRoute>
         }

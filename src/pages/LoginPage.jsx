@@ -304,10 +304,6 @@ export default function LoginPage() {
           )}
         </div>
       </div>
-
-      <div className={styles.footer}>
-        © 2026 FUNAAB — Federal University of Agriculture, Abeokuta
-      </div>
     </div>
   )
 }
