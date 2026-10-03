@@ -76,10 +76,12 @@ export default function useMqtt(kitId) {
       options.password = PASSWORD
     }
 
+    console.log('Attempting to connect to MQTT Broker:', BROKER)
     const client = mqtt.connect(BROKER, options)
     clientRef.current = client
 
     client.on('connect', () => {
+      console.log('Successfully connected to MQTT Broker!')
       setConnected(true)
       TOPICS.forEach(t => client.subscribe(t))
     })
