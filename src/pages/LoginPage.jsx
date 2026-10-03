@@ -1,6 +1,6 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { useNavigate, Navigate } from 'react-router-dom'
-import { FaEye, FaEyeSlash } from 'react-icons/fa'
+import { FaEye, FaEyeSlash, FaUser, FaUserTie, FaExclamationCircle, FaCheckCircle } from 'react-icons/fa'
 import { useAuth } from '../contexts/AuthContext'
 import styles from './LoginPage.module.css'
 
@@ -20,7 +20,7 @@ export default function LoginPage() {
   const [submitting, setSubmitting] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
 
-  // Already logged in — redirect based on role
+  // Already logged in â€” redirect based on role
   if (user && profile) {
     return <Navigate to={profile.role === 'admin' ? '/admin' : '/'} replace />
   }
@@ -150,20 +150,18 @@ export default function LoginPage() {
 
         {error && (
           <div className={styles.alert + ' ' + styles.alertError}>
-            <span className={styles.alertIcon}>✕</span>
-            {error}
+            <span className={styles.alertIcon}><FaExclamationCircle /></span>{error}
           </div>
         )}
 
         {message && (
           <div className={styles.alert + ' ' + styles.alertSuccess}>
-            <span className={styles.alertIcon}>✓</span>
-            {message}
+            <span className={styles.alertIcon}><FaCheckCircle /></span>{message}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className={styles.form}>
-          {/* Account type selector — only shown during signup */}
+          {/* Account type selector â€” only shown during signup */}
           {isSignup && (
             <div className={styles.field}>
               <label className={styles.label}>Account Type</label>
@@ -173,22 +171,20 @@ export default function LoginPage() {
                   className={`${styles.typeBtn} ${accountType === 'client' ? styles.typeBtnActive : ''}`}
                   onClick={() => { setAccountType('client'); setAdminCode('') }}
                 >
-                  <span className={styles.typeIcon}>🌱</span>
-                  <span>Client</span>
+                  <span className={styles.typeIcon}><FaUser /></span><span>Client</span>
                 </button>
                 <button
                   type="button"
                   className={`${styles.typeBtn} ${accountType === 'admin' ? styles.typeBtnActiveAdmin : ''}`}
                   onClick={() => setAccountType('admin')}
                 >
-                  <span className={styles.typeIcon}>⚙</span>
-                  <span>Company Worker</span>
+                  <span className={styles.typeIcon}><FaUserTie /></span><span>Company Worker</span>
                 </button>
               </div>
             </div>
           )}
 
-          {/* Admin code field — only when signup + admin selected */}
+          {/* Admin code field â€” only when signup + admin selected */}
           {isSignup && accountType === 'admin' && (
             <div className={styles.field}>
               <label className={styles.label}>Pre-Registered Admin ID</label>
@@ -270,9 +266,8 @@ export default function LoginPage() {
             {isForgot
               ? 'Send Reset Link'
               : isSignup
-                ? accountType === 'admin'
-                  ? '⚙ Create Admin Account'
-                  : '🌱 Create Client Account'
+                ? accountType === 'admin' ? <><FaUserTie style={{marginRight: '8px'}} /> Create Admin Account</>
+                  : <><FaUser style={{marginRight: '8px'}} /> Create Client Account</>
                 : 'Sign In'
             }
           </button>
@@ -284,7 +279,7 @@ export default function LoginPage() {
               <button className={styles.linkBtn} onClick={() => switchMode('forgot')}>
                 Forgot password?
               </button>
-              <span className={styles.linkDot}>·</span>
+              <span className={styles.linkDot}>Â·</span>
               <button className={styles.linkBtn} onClick={() => switchMode('signup')}>
                 Create an account
               </button>
@@ -307,3 +302,4 @@ export default function LoginPage() {
     </div>
   )
 }
+
