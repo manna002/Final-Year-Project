@@ -1,15 +1,8 @@
-import supabase from './supabase'
+// Activity logger stub - Supabase has been removed.
+// Activities are now logged via the backend API if needed.
 
 export async function logActivity(userId, userEmail, action, details, deviceId = 'manna') {
-  try {
-    await supabase.from('activities').insert({
-      user_id: userId,
-      user_email: userEmail,
-      action,
-      details,
-      device_id: deviceId,
-    })
-  } catch (err) {
-    console.error('Failed to log activity:', err)
-  }
+  // No-op: Supabase logging removed. 
+  // Could be wired to POST /api/activities in the future.
+  console.log(`[Activity] ${action}: ${details}`)
 }

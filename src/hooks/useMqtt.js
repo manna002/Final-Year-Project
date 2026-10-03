@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import mqtt from 'mqtt'
-import supabase from '../lib/supabase'
 
 // Allow fallback to the public broker during transition, but prefer Private Broker env vars
 const BROKER = import.meta.env.VITE_MQTT_BROKER || 'wss://broker.hivemq.com:8884/mqtt'
