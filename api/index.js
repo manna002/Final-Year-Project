@@ -3,7 +3,6 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 
 import connectDB from './lib/mongodb.js';
-import { startMqttLogger } from './lib/mqttLogger.js';
 
 const app = express();
 app.use(cors());
@@ -16,8 +15,6 @@ app.use(async (req, res, next) => {
     if (!dbConnected) {
       await connectDB();
       dbConnected = true;
-      // Start the MQTT logger once DB is connected
-      startMqttLogger();
     }
     next();
   } catch (error) {
