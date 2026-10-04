@@ -8,5 +8,11 @@
       "source": "/(.*)",
       "destination": "/index.html"
     }
+  ],
+  "crons": [
+    {
+      "path": "/api/reports/capture",
+      "schedule": "0 6,8,10,12,14,16,18 * * *"
+    }
   ]
 }
