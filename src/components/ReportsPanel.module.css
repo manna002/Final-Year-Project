@@ -38,19 +38,50 @@
   cursor: not-allowed;
 }
 
-.controls {
-  margin-bottom: 20px;
+.dateFilters {
   display: flex;
-  gap: 10px;
-  align-items: center;
+  align-items: flex-end;
+  gap: 15px;
+  margin-bottom: 20px;
 }
 
-.controls select {
-  background: var(--bg-dark);
-  border: 1px solid var(--border);
+.dateInputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dateInputGroup label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.dateInput {
+  background: #0f1714;
+  border: 1px solid #1a3a2e;
   color: var(--text-main);
-  padding: 6px 12px;
+  padding: 8px 12px;
   border-radius: 6px;
+  font-family: inherit;
+  color-scheme: dark;
+}
+
+.refreshBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #0f1714;
+  color: var(--green);
+  border: 1px solid #1a3a2e;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+  height: 35px;
+}
+
+.refreshBtn:hover {
+  background: #1a3a2e;
 }
 
 .tableWrapper {

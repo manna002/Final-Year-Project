@@ -1,29 +1,39 @@
 import { useState, useEffect } from 'react';
+import { RefreshCw } from 'lucide-react';
 import styles from './ReportsPanel.module.css';
 
 export default function ReportsPanel({ kitId }) {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [days, setDays] = useState(7);
+
+  const formatDate = (date) => date.toISOString().split('T')[0];
+  
+  const today = new Date();
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(today.getDate() - 7);
+
+  const [fromDate, setFromDate] = useState(formatDate(sevenDaysAgo));
+  const [toDate, setToDate] = useState(formatDate(today));
+
+  const fetchReports = async () => {
+    setLoading(true);
+    try {
+      const baseUrl = import.meta.env.PROD ? '/api' : (import.meta.env.VITE_API_URL || 'http://localhost:5000/api');
+      const res = await fetch(`${baseUrl}/reports/water/${kitId}?from=${fromDate}&to=${toDate}`);
+      if (res.ok) {
+        const data = await res.json();
+        setLogs(data);
+      }
+    } catch (err) {
+      console.error('Error fetching reports:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    async function fetchReports() {
-      setLoading(true);
-      try {
-        const baseUrl = import.meta.env.PROD ? '/api' : (import.meta.env.VITE_API_URL || 'http://localhost:5000/api');
-        const res = await fetch(`${baseUrl}/reports/water/${kitId}?days=${days}`);
-        if (res.ok) {
-          const data = await res.json();
-          setLogs(data);
-        }
-      } catch (err) {
-        console.error('Error fetching reports:', err);
-      } finally {
-        setLoading(false);
-      }
-    }
     fetchReports();
-  }, [kitId, days]);
+  }, [kitId]);
 
   const downloadCSV = () => {
     if (logs.length === 0) return;
@@ -47,7 +57,7 @@ export default function ReportsPanel({ kitId }) {
     
     const link = document.createElement('a');
     link.setAttribute('href', url);
-    link.setAttribute('download', `${kitId}_Weekly_Report.csv`);
+    link.setAttribute('download', `${kitId}_Report_${fromDate}_to_${toDate}.csv`);
     link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
@@ -67,13 +77,31 @@ export default function ReportsPanel({ kitId }) {
         </button>
       </div>
       
-      <div className={styles.controls}>
-        <label>Show data for the last:</label>
-        <select value={days} onChange={e => setDays(Number(e.target.value))}>
-          <option value={7}>7 Days</option>
-          <option value={14}>14 Days</option>
-          <option value={30}>30 Days</option>
-        </select>
+      <div className={styles.dateFilters}>
+        <div className={styles.dateInputGroup}>
+          <label>From:</label>
+          <input 
+            type="date" 
+            value={fromDate} 
+            onChange={(e) => setFromDate(e.target.value)}
+            className={styles.dateInput}
+          />
+        </div>
+        
+        <div className={styles.dateInputGroup}>
+          <label>To:</label>
+          <input 
+            type="date" 
+            value={toDate} 
+            onChange={(e) => setToDate(e.target.value)}
+            className={styles.dateInput}
+          />
+        </div>
+
+        <button onClick={fetchReports} className={styles.refreshBtn}>
+          <RefreshCw size={16} />
+          Refresh
+        </button>
       </div>
 
       <div className={styles.tableWrapper}>

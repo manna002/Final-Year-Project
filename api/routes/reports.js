@@ -9,15 +9,26 @@ const router = express.Router();
 router.get('/water/:kitId', async (req, res) => {
   try {
     const { kitId } = req.params;
-    const days = parseInt(req.query.days) || 7;
+    const { from, to, days } = req.query;
     
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - days);
-    startDate.setHours(0, 0, 0, 0);
+    let startDate = new Date();
+    let endDate = new Date();
+    
+    if (from && to) {
+      startDate = new Date(from);
+      startDate.setHours(0, 0, 0, 0);
+      
+      endDate = new Date(to);
+      endDate.setHours(23, 59, 59, 999);
+    } else {
+      const d = parseInt(days) || 7;
+      startDate.setDate(startDate.getDate() - d);
+      startDate.setHours(0, 0, 0, 0);
+    }
 
     const logs = await SensorLog.find({
       kitId: kitId,
-      timestamp: { $gte: startDate }
+      timestamp: { $gte: startDate, $lte: endDate }
     }).sort({ timestamp: 1 });
 
     res.json(logs);
