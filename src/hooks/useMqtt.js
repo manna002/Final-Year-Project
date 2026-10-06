@@ -17,6 +17,7 @@ export default function useMqtt(kitId) {
     temperature: null,
     humidity:    null,
     moisture:    null,
+    tank:        null,
     flowrate:    null,
     totalflow:   null,
   })
@@ -51,6 +52,7 @@ export default function useMqtt(kitId) {
       `${base}/sensor/moisture`,
       `${base}/sensor/flowrate`,
       `${base}/sensor/totalflow`,
+      `${base}/sensor/tank`,
       `${base}/relay/state`,
       `${base}/tank/state`,
       `${base}/fan/state`,
@@ -111,6 +113,9 @@ export default function useMqtt(kitId) {
         case `${base}/sensor/moisture`:
           setSensors(s => ({ ...s, moisture: msg }))
           setMoistHistory(h => [...h.slice(-29), { time: ts, value: parseFloat(msg) }])
+          break
+        case `${base}/sensor/tank`:
+          setSensors(s => ({ ...s, tank: msg }))
           break
         case `${base}/sensor/flowrate`:
           setSensors(s => ({ ...s, flowrate: msg }))

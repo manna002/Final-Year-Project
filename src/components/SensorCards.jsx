@@ -23,7 +23,7 @@ export default function SensorCards({ sensors, relayState, mode }) {
     {
       label: 'Temperature',
       value: sensors.temperature ?? '--',
-      unit: 'Â°C',
+      unit: '°C',
       icon: <Thermometer size={24} />,
       color: tempColor(parseFloat(sensors.temperature)),
     },
@@ -44,11 +44,11 @@ export default function SensorCards({ sensors, relayState, mode }) {
       barVal: m,
     },
     {
-      label: 'Flow Rate',
-      value: sensors.flowrate ?? '--',
-      unit: 'L/min',
+      label: 'Tank State',
+      value: sensors.tank ?? '--',
+      unit: '',
       icon: <Waves size={24} />,
-      color: 'var(--green)',
+      color: sensors.tank === 'EMPTY' || sensors.tank === 'RUN_LOW' ? 'var(--red)' : 'var(--blue)',
     },
     {
       label: 'Total Flow',
