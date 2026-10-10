@@ -12,7 +12,8 @@ import ReportsPanel from '../components/ReportsPanel'
 import styles from './AdminLiveMonitor.module.css'
 
 import AIAssistantPanel from '../components/AIAssistantPanel'
-const TABS = ['Monitor', 'Control', 'Timers', 'Reports', 'AI Assistant', 'Log']
+import AnalysisPanel from '../components/AnalysisPanel'
+const TABS = ['Monitor', 'Control', 'Timers', 'Reports', 'Analysis', 'AI Assistant', 'Log']
 
 export default function AdminLiveMonitor({ kit, onBack }) {
   const mqtt = useMqtt(kit.kit_id)
@@ -113,6 +114,7 @@ export default function AdminLiveMonitor({ kit, onBack }) {
           <ReportsPanel kitId={kit.kit_id} />
         )}
 
+        {tab === 'Analysis' && <AnalysisPanel kitId={kit.kit_id} />}
         {tab === 'AI Assistant' && <AIAssistantPanel kitId={kit.kit_id} />}
 
         {tab === 'Log' && (

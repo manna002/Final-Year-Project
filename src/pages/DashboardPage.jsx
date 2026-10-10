@@ -12,7 +12,8 @@ import AlertBanner from '../components/AlertBanner'
 import SensorChart from '../components/SensorChart'
 import styles from './DashboardPage.module.css'
 
-const TABS = ['Monitor', 'Control', 'Timers', 'Log']
+import AnalysisPanel from '../components/AnalysisPanel'
+const TABS = ['Monitor', 'Control', 'Timers', 'Analysis', 'Log']
 
 export default function DashboardPage() {
   const { user, profile } = useAuth()
@@ -185,6 +186,8 @@ export default function DashboardPage() {
             profile={profile}
           />
         )}
+
+        {tab === 'Analysis' && <AnalysisPanel kitId={selectedKitId} />}
 
         {tab === 'Log' && (
           <EventLog logs={mqtt.logs} />

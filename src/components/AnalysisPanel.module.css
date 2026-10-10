@@ -1,0 +1,159 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  background: var(--surface);
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.titleArea {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon {
+  color: var(--green);
+}
+
+.titleArea h2 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: var(--text-main);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.presets {
+  display: flex;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.presetBtn {
+  background: transparent;
+  border: none;
+  padding: 10px 16px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: 0.2s;
+}
+
+.presetBtn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-main);
+}
+
+.presetBtn.active {
+  background: var(--green);
+  color: #fff;
+}
+
+.datePicker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+
+.datePicker span {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.dateInput {
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 0.9rem;
+  outline: none;
+  color-scheme: dark;
+}
+
+.applyBtn {
+  background: var(--green);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.applyBtn:hover {
+  background: var(--green-dim);
+}
+
+.loading, .empty {
+  padding: 60px;
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+}
+
+.graphsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.graphCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  height: 450px;
+  display: flex;
+  flex-direction: column;
+}
+
+.graphCard h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 20px 0;
+  color: var(--text-main);
+  font-size: 1.1rem;
+}
+
+.graphWrapper {
+  flex: 1;
+  min-height: 0;
+}
+
+@media (min-width: 1200px) {
+  .graphsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
