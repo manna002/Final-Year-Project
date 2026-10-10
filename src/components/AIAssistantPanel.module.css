@@ -1,5 +1,5 @@
 .container {
-  background: var(--bg-card);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 12px;
   overflow: hidden;
@@ -10,7 +10,7 @@
 
 .tabHeader {
   display: flex;
-  background: #0b110f;
+  background: var(--green);
   border-bottom: 1px solid var(--border);
 }
 
@@ -23,7 +23,7 @@
   padding: 16px;
   background: none;
   border: none;
-  color: var(--text-muted);
+  color: #ffffff;
   font-weight: 600;
   cursor: pointer;
   transition: 0.2s;
@@ -31,14 +31,14 @@
 }
 
 .tabBtn:hover {
-  color: var(--text-main);
+  color: #ffffff;
   background: rgba(255, 255, 255, 0.02);
 }
 
 .tabBtn.active {
   color: var(--green);
   border-bottom-color: var(--green);
-  background: rgba(26, 188, 156, 0.05);
+  background: #ffffff;
 }
 
 /* Chat Area */
@@ -88,8 +88,8 @@
 }
 
 .botMsg {
-  background: #1a2522;
-  color: var(--text-main);
+  background: var(--green-dim);
+  color: #ffffff;
   border: 1px solid var(--border);
   border-bottom-left-radius: 4px;
 }
@@ -103,16 +103,16 @@
 .inputArea {
   display: flex;
   padding: 16px;
-  background: #0b110f;
+  background: var(--green);
   border-top: 1px solid var(--border);
   gap: 10px;
 }
 
 .textInput {
   flex: 1;
-  background: #111a17;
+  background: #4ade80;
   border: 1px solid var(--border);
-  color: var(--text-main);
+  color: #ffffff;
   padding: 12px 16px;
   border-radius: 8px;
   outline: none;
@@ -149,7 +149,7 @@
 }
 
 .trainCard {
-  background: #111a17;
+  background: #4ade80;
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 30px;
@@ -159,18 +159,18 @@
 
 .trainCard h3 {
   margin-top: 0;
-  color: var(--text-main);
+  color: #ffffff;
   margin-bottom: 15px;
 }
 
 .trainCard p {
-  color: var(--text-muted);
+  color: #ffffff;
   line-height: 1.6;
   margin-bottom: 30px;
 }
 
 .statusBox {
-  background: #0b110f;
+  background: var(--green);
   border: 1px solid var(--border);
   padding: 20px;
   border-radius: 8px;
@@ -181,7 +181,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: var(--text-main);
+  color: #ffffff;
   font-weight: 600;
   margin-bottom: 15px;
 }
@@ -197,7 +197,7 @@
 
 .progressContainer {
   height: 6px;
-  background: #1a2522;
+  background: var(--green-dim);
   border-radius: 3px;
   overflow: hidden;
   margin-bottom: 15px;
@@ -210,7 +210,7 @@
 }
 
 .logText {
-  color: var(--text-muted);
+  color: #ffffff;
   font-family: monospace;
   font-size: 0.85rem;
   margin: 0;
@@ -225,8 +225,8 @@
 .trainBtn {
   width: 100%;
   padding: 14px;
-  background: #1a2522;
-  color: var(--text-main);
+  background: var(--green-dim);
+  color: #ffffff;
   border: 1px solid var(--green);
   border-radius: 8px;
   font-weight: 600;
