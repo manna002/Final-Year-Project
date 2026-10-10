@@ -56,7 +56,6 @@ export default function SensorCards({ sensors, relayState, mode }) {
       unit: 'L',
       icon: <GlassWater size={24} />,
       color: 'var(--green)',
-    },
     },{
       label: 'Nitrogen (N)',
       value: sensors.nitrogen ?? '--',
@@ -115,3 +114,4 @@ export default function SensorCards({ sensors, relayState, mode }) {
     </div>
   )
 }
+
