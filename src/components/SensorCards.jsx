@@ -1,4 +1,4 @@
-import { Thermometer, Droplet, Leaf, Waves, GlassWater } from 'lucide-react'
+import { Thermometer, Droplet, Leaf, Waves, GlassWater, FlaskConical } from 'lucide-react'
 import styles from './SensorCards.module.css'
 
 function moistureColor(v) {
@@ -57,6 +57,25 @@ export default function SensorCards({ sensors, relayState, mode }) {
       icon: <GlassWater size={24} />,
       color: 'var(--green)',
     },
+    },{
+      label: 'Nitrogen (N)',
+      value: sensors.nitrogen ?? '--',
+      unit: 'mg/kg',
+      icon: <FlaskConical size={24} />,
+      color: 'var(--blue)',
+    },{
+      label: 'Phosphorus (P)',
+      value: sensors.phosphorus ?? '--',
+      unit: 'mg/kg',
+      icon: <FlaskConical size={24} />,
+      color: 'var(--green)',
+    },{
+      label: 'Potassium (K)',
+      value: sensors.potassium ?? '--',
+      unit: 'mg/kg',
+      icon: <FlaskConical size={24} />,
+      color: 'var(--amber)',
+    }
   ]
 
   return (

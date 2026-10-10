@@ -75,6 +75,9 @@ float threshFan = 30.0;  // Target Temp for Fan
 float currentTemp = 0.0;
 float currentHum  = 0.0;
 float currentMoisture = 0.0;
+float currentN = 14.5;
+float currentP = 22.1;
+float currentK = 35.0;
 float vBat = 0.0;
 const float BAT_DIVIDER_RATIO = (155.0f / 33.0f);
 
@@ -457,6 +460,9 @@ void loop() {
       mqtt.publish(getTopic("sensor/flowrate").c_str(), String(flowRate).c_str());
       mqtt.publish(getTopic("sensor/totalflow").c_str(), String(totalLitres).c_str());
       mqtt.publish(getTopic("sensor/tank").c_str(), tankLevelStr.c_str());
+      mqtt.publish(getTopic("sensor/nitrogen").c_str(), String(currentN).c_str());
+      mqtt.publish(getTopic("sensor/phosphorus").c_str(), String(currentP).c_str());
+      mqtt.publish(getTopic("sensor/potassium").c_str(), String(currentK).c_str());
     }
   }
 

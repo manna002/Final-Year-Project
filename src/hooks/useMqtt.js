@@ -20,6 +20,9 @@ export default function useMqtt(kitId) {
     tank:        null,
     flowrate:    null,
     totalflow:   null,
+    nitrogen:    null,
+    phosphorus:  null,
+    potassium:   null,
   })
   const [relayState,  setRelayState]  = useState('OFF')
   const [tankState,   setTankState]   = useState('OFF')
@@ -53,6 +56,9 @@ export default function useMqtt(kitId) {
       `${base}/sensor/flowrate`,
       `${base}/sensor/totalflow`,
       `${base}/sensor/tank`,
+      `${base}/sensor/nitrogen`,
+      `${base}/sensor/phosphorus`,
+      `${base}/sensor/potassium`,
       `${base}/relay/state`,
       `${base}/tank/state`,
       `${base}/fan/state`,
@@ -116,6 +122,15 @@ export default function useMqtt(kitId) {
           break
         case `${base}/sensor/tank`:
           setSensors(s => ({ ...s, tank: msg }))
+          break
+        case `${base}/sensor/nitrogen`:
+          setSensors(s => ({ ...s, nitrogen: msg }))
+          break
+        case `${base}/sensor/phosphorus`:
+          setSensors(s => ({ ...s, phosphorus: msg }))
+          break
+        case `${base}/sensor/potassium`:
+          setSensors(s => ({ ...s, potassium: msg }))
           break
         case `${base}/sensor/flowrate`:
           setSensors(s => ({ ...s, flowrate: msg }))

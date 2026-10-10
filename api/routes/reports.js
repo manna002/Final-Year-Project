@@ -72,6 +72,9 @@ router.get('/capture', async (req, res) => {
       client.subscribe('+/sensor/humidity');
       client.subscribe('+/sensor/moisture');
       client.subscribe('+/sensor/totalflow');
+      client.subscribe('+/sensor/nitrogen');
+      client.subscribe('+/sensor/phosphorus');
+      client.subscribe('+/sensor/potassium');
     });
 
     client.on('message', (topic, payload) => {
@@ -82,13 +85,16 @@ router.get('/capture', async (req, res) => {
         const sensorType = parts[2];
 
         if (!latestReadings[kitId]) {
-          latestReadings[kitId] = { temperature: 0, humidity: 0, moisture: 0, totalLitres: 0 };
+          latestReadings[kitId] = { temperature: 0, humidity: 0, moisture: 0, totalLitres: 0, nitrogen: 0, phosphorus: 0, potassium: 0 };
         }
 
         if (sensorType === 'temperature') latestReadings[kitId].temperature = parseFloat(msg);
         if (sensorType === 'humidity') latestReadings[kitId].humidity = parseFloat(msg);
         if (sensorType === 'moisture') latestReadings[kitId].moisture = parseFloat(msg);
         if (sensorType === 'totalflow') latestReadings[kitId].totalLitres = parseFloat(msg);
+        if (sensorType === 'nitrogen') latestReadings[kitId].nitrogen = parseFloat(msg);
+        if (sensorType === 'phosphorus') latestReadings[kitId].phosphorus = parseFloat(msg);
+        if (sensorType === 'potassium') latestReadings[kitId].potassium = parseFloat(msg);
       }
     });
 
@@ -117,6 +123,9 @@ router.get('/capture', async (req, res) => {
           temperature: data.temperature,
           humidity: data.humidity,
           moisture: data.moisture,
+          nitrogen: data.nitrogen,
+          phosphorus: data.phosphorus,
+          potassium: data.potassium,
           totalLitres: data.totalLitres
         });
         savedLogs.push(log);

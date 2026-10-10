@@ -27,6 +27,18 @@ const sensorLogSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
+  nitrogen: {
+    type: Number,
+    default: 0
+  },
+  phosphorus: {
+    type: Number,
+    default: 0
+  },
+  potassium: {
+    type: Number,
+    default: 0
+  },
   totalLitres: {
     type: Number,
     default: 0

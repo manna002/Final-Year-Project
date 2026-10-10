@@ -1,0 +1,26 @@
+Category,Item Description,Quantity,Est. Unit Price (NGN),Total Cost (NGN)
+Electronics & Comm.,ESP32 Dev Board (Type-C),1,9500,9500
+Electronics & Comm.,GSM Module (e.g. SIM800L),1,8000,8000
+Electronics & Comm.,SIM Card + Initial Data,1,1500,1500
+Electronics & Comm.,DS3231 RTC Module,1,2500,2500
+Electronics & Comm.,0.96 inch OLED Display,1,3500,3500
+Sensors & Actuators,DHT22 Sensor,2,4500,9000
+Sensors & Actuators,Capacitive Soil Moisture,1,2000,2000
+Sensors & Actuators,Float Switch,1,2500,2500
+Sensors & Actuators,Water Flow Meter,1,4500,4500
+Sensors & Actuators,8-Channel 5V Relay Module,1,6500,6500
+Sensors & Actuators,12V Solenoid Valve,1,5500,5500
+Sensors & Actuators,DC Water Pump (Demo size),1,3500,3500
+Power & Circuitry,Solar Panel (12V 20W-30W),1,18000,18000
+Power & Circuitry,12V 7Ah Lead-Acid Battery,1,15000,15000
+Power & Circuitry,Basic PCB Board,1,1500,1500
+Power & Circuitry,"Regulators, Resistors, LEDs",1,3500,3500
+Power & Circuitry,"Wires (19yd Digital + 19yd DC)",1,6000,6000
+Power & Circuitry,Jumper Wires (Packs),2,1500,3000
+Structure & Hydro,Ventilation Fans (Intake/Exhaust),2,7000,14000
+Structure & Hydro,Anti-Pest Net (130 sqm),130,600,78000
+Structure & Hydro,Polythene Nylon Sheet (45 sqm),45,800,36000
+Structure & Hydro,4-inch PVC Pipes (For 70m total),24,4500,108000
+Structure & Hydro,Hydroponic Net Cups,300,150,45000
+Other Budget,Miscellaneous,1,80000,80000
+,,,GRAND TOTAL,466500
