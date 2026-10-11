@@ -11,25 +11,34 @@
   flex-wrap: wrap;
   gap: 20px;
   background: var(--surface);
-  padding: 20px;
+  padding: 20px 24px;
   border-radius: 12px;
   border: 1px solid var(--border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
 }
 
 .titleArea {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
 }
 
 .icon {
   color: var(--green);
+  flex-shrink: 0;
 }
 
 .titleArea h2 {
   margin: 0;
-  font-size: 1.3rem;
+  font-size: 1.35rem;
   color: var(--text-main);
+  font-weight: 700;
+}
+
+.subtitle {
+  margin: 4px 0 0 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
 }
 
 .controls {
@@ -50,10 +59,10 @@
 .presetBtn {
   background: transparent;
   border: none;
-  padding: 10px 16px;
+  padding: 9px 15px;
   color: var(--text-muted);
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-size: 0.88rem;
+  font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -83,7 +92,7 @@
 
 .datePicker span {
   color: var(--text-muted);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
 
 .dateInput {
@@ -91,7 +100,7 @@
   border: none;
   color: var(--text-main);
   font-family: inherit;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   outline: none;
   color-scheme: dark;
 }
@@ -106,10 +115,41 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  transition: 0.2s;
 }
 
 .applyBtn:hover {
   background: var(--green-dim);
+}
+
+/* Category Filter Tabs */
+.filterBar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.filterPill {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.filterPill:hover {
+  border-color: var(--green);
+  color: var(--text-main);
+}
+
+.activeFilter {
+  background: var(--green);
+  border-color: var(--green);
+  color: #fff !important;
 }
 
 .loading, .empty {
@@ -119,13 +159,14 @@
   border: 1px solid var(--border);
   border-radius: 12px;
   color: var(--text-muted);
-  font-size: 1.1rem;
+  font-size: 1.05rem;
 }
 
+/* 6-Graph Responsive Grid */
 .graphsGrid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 20px;
+  gap: 22px;
 }
 
 .graphCard {
@@ -133,18 +174,60 @@
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 20px;
-  height: 450px;
+  height: 380px;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.graphCard h3 {
+.graphCard:hover {
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.cardTitle {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin: 0 0 20px 0;
+  gap: 8px;
+}
+
+.cardTitle h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
   color: var(--text-main);
-  font-size: 1.1rem;
+}
+
+.statBadges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+}
+
+.badge {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  border-radius: 6px;
+  color: var(--text-main);
+}
+
+.badgeMuted {
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  border-radius: 6px;
+  color: var(--text-muted);
 }
 
 .graphWrapper {
@@ -152,8 +235,14 @@
   min-height: 0;
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 900px) {
   .graphsGrid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1440px) {
+  .graphsGrid {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
