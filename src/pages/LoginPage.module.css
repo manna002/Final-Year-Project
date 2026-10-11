@@ -127,8 +127,18 @@
   font-family: var(--font);
   font-size: 12px;
   color: var(--muted);
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   margin-top: 2px;
+}
+
+.brandTag {
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--green);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-top: 4px;
 }
 
 /* Title & subtitle */

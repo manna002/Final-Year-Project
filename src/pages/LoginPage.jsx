@@ -142,7 +142,8 @@ export default function LoginPage() {
             <img src="/funaab-logo.png" alt="FUNAAB Logo" />
           </div>
           <div className={styles.brandName}>FUNAAB</div>
-          <div className={styles.brandSub}>Smart Farm System</div>
+          <div className={styles.brandSub}>Federal University of Agriculture, Abeokuta</div>
+          <div className={styles.brandTag}>Smart Farm System</div>
         </div>
 
         <h1 className={styles.title}>{title}</h1>

@@ -56,8 +56,17 @@
 
 .brandSub {
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.7);
-  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.3px;
+}
+
+.brandTag {
+  font-size: 9px;
+  color: var(--green-light);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-top: 1px;
 }
 
 /* Header right area */

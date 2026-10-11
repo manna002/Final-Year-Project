@@ -42,7 +42,8 @@ export default function App() {
                   </Link>
                   <div>
                     <div className={styles.brandName}>FUNAAB</div>
-                    <div className={styles.brandSub}>Smart Farm System</div>
+                    <div className={styles.brandSub}>Federal University of Agriculture, Abeokuta</div>
+                    <div className={styles.brandTag}>Smart Farm System</div>
                   </div>
                 </div>
 
