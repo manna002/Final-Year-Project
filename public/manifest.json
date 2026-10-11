@@ -5,13 +5,13 @@
   "description": "Federal University of Agriculture, Abeokuta - Smart Irrigation and Precision Agriculture Platform",
   "icons": [
     {
-      "src": "/funaab-logo.png",
+      "src": "/icon-192.png",
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "any maskable"
     },
     {
-      "src": "/funaab-logo.png",
+      "src": "/icon-512.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any maskable"
