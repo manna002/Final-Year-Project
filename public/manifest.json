@@ -1,0 +1,17 @@
+{
+  "short_name": "FUNAAB Farm",
+  "name": "FUNAAB - Federal University of Agriculture, Abeokuta Smart Farm System",
+  "description": "FUNAAB Smart Irrigation and Precision Agriculture Monitoring Platform",
+  "icons": [
+    {
+      "src": "/funaab-logo.png",
+      "type": "image/png",
+      "sizes": "192x192 512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#f0f5f0",
+  "theme_color": "#16a34a",
+  "display": "standalone",
+  "orientation": "portrait"
+}
