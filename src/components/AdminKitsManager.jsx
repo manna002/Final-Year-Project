@@ -55,7 +55,7 @@ export default function AdminKitsManager({ users }) {
         },
         body: JSON.stringify({
           kit_id: newKitId.trim(),
-          name: newKitName.trim() || 'FUNAAB IMS'
+          name: newKitName.trim() || 'FUNAAB SMART FARM SYSTEM'
         })
       })
       const data = await res.json()

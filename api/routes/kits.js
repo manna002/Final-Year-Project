@@ -66,7 +66,7 @@ router.post('/', auth, async (req, res) => {
     kit = new Kit({ 
       kitId: kit_id, 
       kit_id: kit_id, // Satisfy orphaned MongoDB index
-      name: name || 'FUNAAB IMS' 
+      name: name || 'FUNAAB SMART FARM SYSTEM' 
     });
     await kit.save();
     

@@ -1,4 +1,4 @@
-﻿import { useState } from 'react'
+import { useState } from 'react'
 import { useNavigate, Navigate } from 'react-router-dom'
 import { FaEye, FaEyeSlash, FaUser, FaUserTie, FaExclamationCircle, FaCheckCircle } from 'react-icons/fa'
 import { useAuth } from '../contexts/AuthContext'
@@ -142,7 +142,7 @@ export default function LoginPage() {
             <img src="/funaab-logo.png" alt="FUNAAB Logo" />
           </div>
           <div className={styles.brandName}>FUNAAB</div>
-          <div className={styles.brandSub}>Smart Irrigation System</div>
+          <div className={styles.brandSub}>Smart Farm System</div>
         </div>
 
         <h1 className={styles.title}>{title}</h1>

@@ -94,13 +94,13 @@ export default function DashboardPage() {
           >
             {kits.map(k => (
               <option key={k.id} value={k.kit_id}>
-                {(k.name === 'New Smart Kit' ? 'FUNAAB IMS' : (k.name || k.kit_id))} ({mqtt.espStatus || k.status})
+                {(k.name === 'New Smart Kit' ? 'FUNAAB SMART FARM SYSTEM' : (k.name || k.kit_id))} ({mqtt.espStatus || k.status})
               </option>
             ))}
           </select>
         ) : (
           <span className={styles.singleKitName}>
-            {(kits[0].name === 'New Smart Kit' ? 'FUNAAB IMS' : (kits[0].name || kits[0].kit_id))}
+            {(kits[0].name === 'New Smart Kit' ? 'FUNAAB SMART FARM SYSTEM' : (kits[0].name || kits[0].kit_id))}
             <span className={`${styles.kitBadge} ${mqtt.espStatus === 'ONLINE' ? styles.online : styles.offline}`}>
               {mqtt.espStatus || kits[0].status}
             </span>

@@ -12,7 +12,7 @@ const KitSchema = new mongoose.Schema({
   },
   name: {
     type: String,
-    default: 'FUNAAB IMS'
+    default: 'FUNAAB SMART FARM SYSTEM'
   },
   owner_id: {
     type: mongoose.Schema.Types.ObjectId,

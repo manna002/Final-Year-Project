@@ -42,7 +42,7 @@ export default function App() {
                   </Link>
                   <div>
                     <div className={styles.brandName}>FUNAAB</div>
-                    <div className={styles.brandSub}>Smart Irrigation Dashboard</div>
+                    <div className={styles.brandSub}>Smart Farm System</div>
                   </div>
                 </div>
 
