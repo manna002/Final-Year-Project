@@ -1,0 +1,25 @@
+S/N,Item Description,Min Est. Price (NGN),Max Est. Price (NGN)
+1,ESP32 Dev Board (Type-C),17000,22000
+2,GSM Module (e.g. SIM800L),13500,18500
+3,SIM Card + Initial Data Pack,1500,3000
+4,DS3231 RTC Module,4500,6500
+5,0.96 inch OLED Display,6000,9000
+6,DHT22 Temperature & Humidity Sensor,5500,8000
+7,Capacitive Soil Moisture Sensor,3500,5500
+8,Float Switch (Water Level),4000,7000
+9,Water Flow Meter (e.g. YF-S201),8500,12500
+10,8-Channel 5V Relay Module,12000,16500
+11,"12V Brass Solenoid Valve (1/2 inch, Heavy Duty)",18000,26000
+12,12V 7Ah Lead-Acid Battery,20000,26000
+13,Basic PCB Board (Prototyping/Dot matrix),2500,5000
+14,"Regulators, Resistors, LEDs (Assorted pack)",4000,7500
+15,"Wires (4yd Digital + 19yd DC hooks)",4500,8500
+16,"Jumper Wires (3 Ribbon Packs: M-M, M-F, F-F)",7500,11000
+17,Ventilation Fans (Intake/Exhaust 12V pairs),8000,15000
+18,Normal Net (Standard 130 sqm general mesh),25000,38000
+19,"Polythene Nylon Sheet (4 yards thick DPC / 10x12ft)",3200,6000
+20,"4-inch PVC Pipes (For 70m total / ~12 lengths)",96000,130000
+21,Hydroponic Net Cups (Pack of 50-100),12000,20000
+22,Standard/Normal Soil NPK Sensor Module (UART/Serial),35000,55000
+23,"Miscellaneous (Tape, PVC glue, project box casing)",15000,22000
+TOTAL,Adjusted Project Grand Total,325200,471000
